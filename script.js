@@ -86,9 +86,13 @@ function handleEqualsClick() {
     const result = calculate(prevInputInt, currInputInt, operator);
     justCalculated = true;
 
-    screen.textContent = Number.isInteger(result)
-        ? result
-        : parseFloat(result.toFixed(4));
+    if (typeof result !== "number") {
+        screen.textContent = result;
+    } else {
+        screen.textContent = Number.isInteger(result)
+            ? result
+            : parseFloat(result.toFixed(4));
+    }
 
     // Set up for chaining
     previousInput = result;
