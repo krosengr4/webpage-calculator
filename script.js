@@ -1,37 +1,36 @@
-const plusBtn = document.querySelector("#plus");
-const minusBtn = document.querySelector("#minus");
-const multiplyBtn = document.querySelector("#multiply");
-const divBtn = document.querySelector("#divide");
 const equalsBtn = document.querySelector("#equals");
-const oneBtn = document.querySelector("#one");
-const twoBtn = document.querySelector("#two");
-const threeBtn = document.querySelector("#three");
-const fourBtn = document.querySelector("#four");
-const fiveBtn = document.querySelector("#five");
-const sixBtn = document.querySelector("#six");
-const sevenBtn = document.querySelector("#seven");
-const eightBtn = document.querySelector("#eight");
-const nineBtn = document.querySelector("#nine");
 const zeroBtn = document.querySelector("#zero");
 const screen = document.querySelector("#screen");
 const clearBtn = document.querySelector("#clear");
 
-let currentInput = "0";
+let currentInput = "";
 let previousInput = "";
 let operator = "";
+let justCalculated = false;
 
 function clear() {
-    screen.textContent = "00";
+    screen.textContent = "0";
     currentInput = "";
+    previousInput = "";
+    operator = "";
+    justCalculated = false;
+
+    document
+        .querySelectorAll(".operators")
+        .forEach((btn) => btn.classList.remove("active"));
 }
 
-function numberClicked(event) {
+function handleNumClick(event) {
     if (currentInput.length >= 9) {
         return;
     }
+    if (justCalculated) {
+        currentInput = "";
+        justCalculated = false;
+    }
     let digit = event.target.textContent;
 
-    if (currentInput === "0") {
+    if (currentInput === "") {
         currentInput = `${digit}`;
     } else {
         currentInput = currentInput + `${digit}`;
@@ -40,8 +39,71 @@ function numberClicked(event) {
     screen.textContent = currentInput;
 }
 
+function handleOperatorClick(event) {
+    document
+        .querySelectorAll(".operators")
+        .forEach((btn) => btn.classList.remove("active"));
+    event.target.classList.add("active");
+
+    if (justCalculated || currentInput !== "") {
+        previousInput = justCalculated ? previousInput : currentInput;
+        currentInput = "";
+        justCalculated = false;
+    }
+
+    operator = event.target.textContent;
+}
+
+function calculate(a, b, oper) {
+    switch (oper) {
+        case "+":
+            return a + b;
+        case "-":
+            return a - b;
+        case "*":
+            return a * b;
+        case "/":
+            if (b == 0) {
+                return "Err";
+            } else {
+                return a / b;
+            }
+    }
+}
+
+function handleEqualsClick() {
+    if (previousInput == "" || operator == "") {
+        return;
+    }
+
+    document
+        .querySelectorAll(".operators")
+        .forEach((btn) => btn.classList.remove("active"));
+
+    const prevInputInt = Number(previousInput);
+    const currInputInt = Number(currentInput);
+
+    const result = calculate(prevInputInt, currInputInt, operator);
+    justCalculated = true;
+
+    screen.textContent = Number.isInteger(result)
+        ? result
+        : parseFloat(result.toFixed(4));
+
+    // Set up for chaining
+    previousInput = result;
+    currentInput = "";
+    operator = "";
+}
+
 clearBtn.addEventListener("click", clear);
+equalsBtn.addEventListener("click", handleEqualsClick);
 
 document.querySelectorAll(".numbers").forEach((btn) => {
-    btn.addEventListener("click", numberClicked);
+    btn.addEventListener("click", handleNumClick);
+});
+zeroBtn.addEventListener("click", handleNumClick);
+
+document.querySelectorAll(".operators").forEach((btn) => {
+    btn.addEventListener("click", handleOperatorClick);
 });
