@@ -14,10 +14,16 @@ const eightBtn = document.querySelector("#eight");
 const nineBtn = document.querySelector("#nine");
 const zeroBtn = document.querySelector("#zero");
 const screen = document.querySelector("#screen");
+const clearBtn = document.querySelector("#clear");
 
 let currentInput = "0";
 let previousInput = "";
 let operator = "";
+
+function clear() {
+    screen.textContent = "00";
+    currentInput = "";
+}
 
 function numberClicked(event) {
     if (currentInput.length >= 9) {
@@ -33,6 +39,8 @@ function numberClicked(event) {
 
     screen.textContent = currentInput;
 }
+
+clearBtn.addEventListener("click", clear);
 
 document.querySelectorAll(".numbers").forEach((btn) => {
     btn.addEventListener("click", numberClicked);
