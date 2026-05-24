@@ -43,16 +43,21 @@ button:hover {
     cursor: pointer;
 }
 
-#top-buttons {
+#operators {
     display: flex;
     justify-content: center;
     gap: 12px;
     margin-top: 12px;
 }
 
-.top-buttons {
+.operators {
     height: 72px;
     width: 110px;
+}
+
+.operators.active {
+    background-color: #ffaaff;
+    color: black;
 }
 
 #numbers {
