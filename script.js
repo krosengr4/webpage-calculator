@@ -14,3 +14,26 @@ const eightBtn = document.querySelector("#eight");
 const nineBtn = document.querySelector("#nine");
 const zeroBtn = document.querySelector("#zero");
 const screen = document.querySelector("#screen");
+
+let currentInput = "0";
+let previousInput = "";
+let operator = "";
+
+function numberClicked(event) {
+    if (currentInput.length >= 9) {
+        return;
+    }
+    let digit = event.target.textContent;
+
+    if (currentInput === "0") {
+        currentInput = `${digit}`;
+    } else {
+        currentInput = currentInput + `${digit}`;
+    }
+
+    screen.textContent = currentInput;
+}
+
+document.querySelectorAll(".numbers").forEach((btn) => {
+    btn.addEventListener("click", numberClicked);
+});
